@@ -58,7 +58,7 @@ double *BSM(double t,int N, double r, double sigma,double S0){
     MBrow = MB(t,N);
     double *Black_Scholes = new double [N];
     for(int k = 0;k<N;k++){
-        Black_Scholes[k] = S0*exp((r-pow(sigma,2)/2)*(static_cast<double>(k*t)/static_cast<double>(N)) + sigma*MBrow[k]);
+        Black_Scholes[k] = S0*exp((r-pow(sigma,2)/2)*(k*t/N) + sigma*MBrow[k]);
     }
     return Black_Scholes;
 }
@@ -103,13 +103,13 @@ double MonteCarlo(int N, double (*phi)(double z), double X[], double r, double T
 
 
 double cumulative(double z){
-return 0.5 * erfc(-z * sqrt(0.5));
+    return 0.5 * erfc(-z * sqrt(0.5));
 }
 
 double *delta_BSM(double S[],int N, double r, double T,double sigma) {
     double *deltaBSM = new double[N];
     for (int j = 0; j<N;j++) {
-        deltaBSM[j] = cumulative((log(S[j])/(K))+(r+pow(sigma,2)/2)*(T-static_cast<double>(T*j)/static_cast<double>(N)) /(sigma*sqrt(T-static_cast<double>(T*j)/static_cast<double>(N))));
+        deltaBSM[j] = cumulative((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N)) /(sigma*sqrt(T-T*j/N)));
     }
     return deltaBSM;
 }
@@ -132,7 +132,7 @@ int main() {
     double price[N];
     for (int k = 0; k<N; k++){
         price[k] = MonteCarlo(N,phi,p,r,T,sigma,T*k/N,s[k]);}
-   double delta[N];
+    double delta[N];
     for (int k =0; k<N-1; k++){
         delta[k] = (price[k+1]-price[k])/(s[k+1]-s[k]);}
     double *Z;
@@ -146,6 +146,11 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
 
 
 
