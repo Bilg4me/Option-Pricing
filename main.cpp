@@ -105,7 +105,7 @@ double cumulative(double z){
 return 0.5 * erfc(-z * sqrt(0.5));
 }
 
-double *delta(int N, double r, double T,double sigma,double S0) {
+double *delta_BS(int N, double r, double T,double sigma,double S0) {
     double *delta = new double[N];
     double *S;
     S = moyBSM(T, N, r, sigma, S0);
