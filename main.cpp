@@ -47,7 +47,7 @@ double *moyBSM(double t,int N, double r, double sigma){
         MoyBS[j] = MoyBS[j]+BSMI[j];}
   }
   for (int k=0;k<N;k++){
-    MoyBS[j]=MoyBS[j]/10000;
+    MoyBS[k]=MoyBS[k]/10000;
   }
   return MoyBS;
 }
