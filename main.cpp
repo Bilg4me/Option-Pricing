@@ -42,7 +42,7 @@ double *moyBSM(double t,int N, double r, double sigma){
   double *MoyBS = new double[N];
   for(int i=0;i<10000;i++){
     double *BSMI;
-    BSMI=BSM(double t,int N, double r, double sigma);
+    BSMI=BSM(t,N,r,sigma);;
     for (int j=0,j<N,j++){
         MoyBS[j] = MoyBS[j]+BSMI[j];}
   }
