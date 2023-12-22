@@ -32,17 +32,17 @@ double normal_distr_centr_red(){
 
 
 
-list<double> Brownian_function(int t){
+vector<double> Brownian_function(int t){
 
-    list<double> Liste = {0}; /* liste avec t éléments valant 0 : [0, 0 ,0 ... t fois] */
+    vector<double> Liste; /* liste avec t éléments valant 0 : [0, 0 ,0 ... t fois] */
 
     /* On va remplacer ces 0 par les Wi */
 
-    
+    Liste.push_back(0);
 
     for(int i=0; i< t ; i++) {
 
-        double W = sqrt(i+1-1)*normal_distr_centr_red() + Liste.back(); /* quand on modifiera le pas de temps on changera le i+1-i*/
+        double W = sqrt(i+1-i)*normal_distr_centr_red() + Liste[-1]; /* quand on modifiera le pas de temps on changera le i+1-i*/
 
 
         /* On met la valeur Wi à la place ieme de la liste*/
@@ -58,6 +58,25 @@ list<double> Brownian_function(int t){
     return Liste ; /* Return les W0, W1, ..., Wt : on aura plus qu'a les insérer pour avoir un St*/
 
 };
+
+vector<double> BSM_chemin(int t, double r, double vol, double S0){
+
+    vector<double> Liste = Brownian_function(t);
+
+    vector<double> new_Liste;
+
+    for(int i=0; i< Liste.size(); i++){
+
+        double S = S0*exp( (r-0.5*vol*vol)*i + vol*Liste[i]     );
+
+        new_Liste.push_back(S);
+    }
+
+    return new_Liste;
+}
+
+
+
 
 
 int main(){
@@ -88,13 +107,23 @@ for (int i=0; i<20; i++) {
 
 cout << " Voici une liste des valeurs à chaque pas de temps d'une fonction brownienne " << endl;
 
-for (double number : Brownian_function(20)) {
+
+vector<double> x = Brownian_function(20);
+
+for (int i=0; i< x.size(); i++) {
 
 
-    cout<< number << ",";
+    cout<< x[i] << ",";
 }
 
+vector<double> y = BSM_chemin(20, 0.05, 0.2, 35);
 
+for (int i=0; i< y.size(); i++) {
+
+    cout<< y[i] << ",";
+
+
+}
 
 return 0;
 }
