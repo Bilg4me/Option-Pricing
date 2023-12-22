@@ -106,7 +106,7 @@ return 0.5 * erfc(-z * sqrt(0.5));
 }
 
 
-// il est là le delta 
+ 
 double *delta_BS(int N, double r, double T,double sigma,double S0) {
     double *delta = new double[N];
     double *S;
@@ -116,6 +116,17 @@ double *delta_BS(int N, double r, double T,double sigma,double S0) {
     }
     return delta;
 }
+
+
+double *delta(double S[], double P[], double T, int N, double r, double sigma){
+    double D[N];
+    for (int k =0; k<N-1; k++){
+        D[k] = (P[k+1]-P[k])/(S[k+1]-S[k]);
+    }
+    return D;
+}
+
+
 
 
 
