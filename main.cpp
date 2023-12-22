@@ -6,6 +6,30 @@
 #include <algorithm>
 using namespace std;
 
+/*double *Gaussian_Simul(int N) {
+    // Seed for random number generation
+    unsigned seed = static_cast<unsigned>(time(NULL));
+    std::srand(seed);
+
+    // Array to store N Gaussian variables
+    double *GS = new double[N];
+
+    // Transform uniform to Gaussian using Box-Muller transform
+    for (int i = 0; i < N; i += 2) {
+        double u1 = static_cast<double>(std::rand()) / RAND_MAX;
+        double u2 = static_cast<double>(std::rand()) / RAND_MAX;
+
+        double z1 = sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);
+        double z2 = sqrt(-2.0 * log(u1)) * sin(2.0 * M_PI * u2);
+
+        GS[i] = z1;
+        if (i + 1 < N) {
+            GS[i + 1] = z2;
+        }
+    }
+
+    return GS;
+}*/
 
 
 double *Gaussian_Simul(int N) {
