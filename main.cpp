@@ -121,8 +121,8 @@ double *delta_BSM(double S[],int N, double r, double T,double sigma) {
 //a revoir
 int main() {
     double *p;
-    int N = 100;
-    int S0 = 100;
+    int N = 10000;
+    int S0 = 34;
     p = Gaussian_Simul(N);
     double r = 0.03;
     double sigma = 0.25;
