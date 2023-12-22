@@ -53,20 +53,20 @@ double *MB(double t, int N){
     return MB_t;
 }
 
-double *BSM(double t,int N, double r, double sigma){
+double *BSM(double t,int N, double r, double sigma,double S0){
     double *MBrow;
     MBrow = MB(t,N);
      double *Black_Scholes = new double [N];
     for(int k = 0;k<N;k++){
-        Black_Scholes[k] = exp((r-pow(sigma,2)/2)*(k*t/N) + sigma*MBrow[k]);
+        Black_Scholes[k] =S0* exp((r-pow(sigma,2)/2)*(k*t/N) + sigma*MBrow[k]);
     }
 return Black_Scholes;
 }
-double *moyBSM(double t,int N, double r, double sigma){
+double *moyBSM(double t,int N, double r, double sigma,double S0){
   double *MoyBS = new double[N];
   for(int i=0;i<10000;i++){
     double *BSMI;
-    BSMI=BSM(t,N,r,sigma);
+    BSMI=BSM(t,N,r,sigma,S0);
     for (int j=0;j<N;j++){
         MoyBS[j] = MoyBS[j]+BSMI[j];}
   }
@@ -101,6 +101,19 @@ double MonteCarlo(int N, double (*phi)(double z), double X[], double r, double T
     return val/N;
 }
 
+double cumulative(double z){
+return 0.5 * erfc(-z * sqrt(0.5));
+}
+
+double *delta_BS(int N, double r, double T,double sigma,double S0) {
+    double *delta = new double[N];
+    double *p;
+    p = moyBSM(T, N, r, sigma, S0);
+    for (int j = 0; j<N;j++) {
+        delta[j] = cumulative((log(p[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N))/(sigma*sqrt(T-T*j/N)));
+    }
+    return delta;
+}
 
 
 
@@ -129,7 +142,7 @@ double price[N];
 for (int k = 0; k<N; k++){
     price[k] = MonteCarlo(N,phi,p,r,T,sigma,T*k/N,s[k]);}
 double *D;
-D = delta(s, price, T, N, r, sigma);
+D = delta_BS(N, r, T, sigma, S0);
     for (int k = 0; k<N; k++){
         cout<<D[k]<<endl;
     }
