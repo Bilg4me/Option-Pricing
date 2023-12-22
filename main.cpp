@@ -40,13 +40,13 @@ return Black_Scholes;
 }
 double *moyBSM(double t,int N, double r, double sigma){
   double *MoyBS = new double[N];
-  for(i=0;i<10000;i++){
+  for(int i=0;i<10000;i++){
     double *BSMI;
     BSMI=BSM(double t,int N, double r, double sigma);
-    for (j=0,j<N,j++){
+    for (int j=0,j<N,j++){
         MoyBS[j] = MoyBS[j]+BSMI[j];}
   }
-  for (k=0,k<N,k++){
+  for (int k=0,k<N,k++){
     MoyBS[j]=MoyBS[j]/10000;
   }
   return MoyBS;
