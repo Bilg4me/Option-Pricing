@@ -114,4 +114,27 @@ double x = 50;
 return 0;
 }
 
+//a revoir
+int main() {
+double *p;
+int N = 365;
+int S0 = 100;
+p = Gaussian_Simul(N);
+double r = 0.03;
+double sigma = 0.25;
+double T = 1;
+double *s;
+s = moyBSM(T,N,r,sigma, S0);
+double price[N];
+for (int k = 0; k<N; k++){
+    price[k] = MonteCarlo(N,phi,p,r,T,sigma,T*k/N,s[k]);}
+double *D;
+D = delta(s, price, T, N, r, sigma);
+    for (int k = 0; k<N; k++){
+        cout<<D[k]<<endl;
+    }
+return 0;
+}
+
+
 
