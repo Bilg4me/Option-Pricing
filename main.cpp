@@ -105,6 +105,8 @@ double cumulative(double z){
 return 0.5 * erfc(-z * sqrt(0.5));
 }
 
+
+// il est là le delta 
 double *delta_BS(int N, double r, double T,double sigma,double S0) {
     double *delta = new double[N];
     double *S;
@@ -117,7 +119,7 @@ double *delta_BS(int N, double r, double T,double sigma,double S0) {
 
 
 
-
+// retire cette ligne là c'est peut être ça qui fait buger le truc vu qu'il y a 2 main
 int main() {
 double *p;
 int N = 100000;
