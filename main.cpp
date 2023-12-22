@@ -118,7 +118,7 @@ double *delta_BSM(int N, double r, double T,double sigma,double S0) {
 }
 
 
-double *delta(double S[], double P[], double T, int N, double r, double sigma){
+double *delta(double S[], double P[], int N){
     double D[N];
     for (int k =0; k<N-1; k++){
         D[k] = (P[k+1]-P[k])/(S[k+1]-S[k]);
@@ -140,27 +140,37 @@ double x = 50;
 return 0;
 }
 
+
 //a revoir
 int main() {
-double *p;
-int N = 365;
-int S0 = 100;
-p = Gaussian_Simul(N);
-double r = 0.03;
-double sigma = 0.25;
-double T = 1;
-double *s;
-s = moyBSM(T,N,r,sigma, S0);
-double price[N];
-for (int k = 0; k<N; k++){
-    price[k] = MonteCarlo(N,phi,p,r,T,sigma,T*k/N,s[k]);}
-double *D;
-D = delta_BS(N, r, T, sigma, S0);
+    double *p;
+    int N = 100;
+    int S0 = 100;
+    p = Gaussian_Simul(N);
+    double r = 0.03;
+    double sigma = 0.25;
+    double T = 1;
+    double *s;
+    s = moyBSM(T,N,r,sigma, S0);
+    double price[N];
     for (int k = 0; k<N; k++){
-        cout<<D[k]<<endl;
+        price[k] = MonteCarlo(N,phi,p,r,T,sigma,T*k/N,s[k]);}
+   double deltasprime[N];
+    for (int k =0; k<N-1; k++){
+        deltaprime[k] = (price[k+1]-price[k])/(s[k+1]-s[k]);}
+    double *Z;
+    Z= delta_BSM(s,N,r,T,sigma);
+    for (int k = 0; k<N; k++){
+        cout<<price[k]<<endl;
+        cout<<s[k]<<endl;
+        cout<<Z[k]<<endl;
+        cout<<deltaprime[k]<<endl;
     }
-return 0;
+
+    return 0;
 }
+
+
 
 
 
