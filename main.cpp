@@ -36,17 +36,17 @@ double *Gaussian_Simul(int N) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
     random_device rd;
-     double *GS = new double [N] ;
-        normal_distribution<double> distribution (0.0,1.0);
-            for (int i=0; i<N; ++i)
-                GS[i] = distribution(generator);
-        return GS;}
+    double *GS = new double [N] ;
+    normal_distribution<double> distribution (0.0,1.0);
+    for (int i=0; i<N; ++i)
+        GS[i] = distribution(generator);
+    return GS;}
 
 double *MB(double t, int N){
     double *GS;
     GS  = Gaussian_Simul(N);
     double *MB_t = new double [N];
-   MB_t[0]=0;
+    MB_t[0]=0;
     for (int k = 0; k<N-1;k++){
         MB_t[k+1] = MB_t[k] + GS[k]*sqrt(t/N) ;
     }
@@ -56,24 +56,24 @@ double *MB(double t, int N){
 double *BSM(double t,int N, double r, double sigma,double S0){
     double *MBrow;
     MBrow = MB(t,N);
-     double *Black_Scholes = new double [N];
+    double *Black_Scholes = new double [N];
     for(int k = 0;k<N;k++){
-        Black_Scholes[k] =S0* exp((r-pow(sigma,2)/2)*(k*t/N) + sigma*MBrow[k]);
+        Black_Scholes[k] = S0*exp((r-pow(sigma,2)/2)*(static_cast<double>(k*t)/static_cast<double>(N)) + sigma*MBrow[k]);
     }
-return Black_Scholes;
+    return Black_Scholes;
 }
 double *moyBSM(double t,int N, double r, double sigma,double S0){
-  double *MoyBS = new double[N];
-  for(int i=0;i<10000;i++){
-    double *BSMI;
-    BSMI=BSM(t,N,r,sigma,S0);
-    for (int j=0;j<N;j++){
-        MoyBS[j] = MoyBS[j]+BSMI[j];}
-  }
-  for (int k=0;k<N;k++){
-    MoyBS[k]=MoyBS[k]/10000;
-  }
-  return MoyBS;
+    double *MoyBS = new double[N];
+    for(int i=0;i<10000;i++){
+        double *BSMI;
+        BSMI=BSM(t,N,r,sigma,S0);
+        for (int j=0;j<N;j++){
+            MoyBS[j] = MoyBS[j]+BSMI[j];}
+    }
+    for (int k=0;k<N;k++){
+        MoyBS[k]=MoyBS[k]/10000;
+    }
+    return MoyBS;
 }
 
 double K = 34;
@@ -101,44 +101,21 @@ double MonteCarlo(int N, double (*phi)(double z), double X[], double r, double T
     return val/N;
 }
 
+
 double cumulative(double z){
 return 0.5 * erfc(-z * sqrt(0.5));
 }
 
-
- 
-double *delta_BSM(int N, double r, double T,double sigma,double S0) {
-    double *delta = new double[N];
-    double *S;
-    S = moyBSM(T, N, r, sigma, S0);
+double *delta_BSM(double S[],int N, double r, double T,double sigma) {
+    double *deltaBSM = new double[N];
     for (int j = 0; j<N;j++) {
-        delta[j] = cumulative((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-static_cast<double>(T*j)/N))/(sigma*sqrt(T-static_cast<double>(T*j)/static_cast<double>(N))));
+        deltaBSM[j] = cumulative((log(S[j])/(K))+(r+pow(sigma,2)/2)*(T-static_cast<double>(T*j)/static_cast<double>(N)) /(sigma*sqrt(T-static_cast<double>(T*j)/static_cast<double>(N))));
     }
-    return delta;
-}
-
-
-double *delta(double S[], double P[], int N){
-    double D[N];
-    for (int k =0; k<N-1; k++){
-        D[k] = (P[k+1]-P[k])/(S[k+1]-S[k]);
-    }
-    return D;
+    return deltaBSM;
 }
 
 
 
-
-
-// retire cette ligne là c'est peut être ça qui fait buger le truc vu qu'il y a 2 main
-int main() {
-double *p;
-int N = 100000;
-double x = 50;
-//p = Gaussian_Simul(N);
-//cout<<MonteCarlo(N,phi,p,0.03,1,0.3,0,x)<<endl;
-return 0;
-}
 
 
 //a revoir
@@ -155,16 +132,16 @@ int main() {
     double price[N];
     for (int k = 0; k<N; k++){
         price[k] = MonteCarlo(N,phi,p,r,T,sigma,T*k/N,s[k]);}
-   double deltasprime[N];
+   double delta[N];
     for (int k =0; k<N-1; k++){
-        deltaprime[k] = (price[k+1]-price[k])/(s[k+1]-s[k]);}
+        delta[k] = (price[k+1]-price[k])/(s[k+1]-s[k]);}
     double *Z;
     Z= delta_BSM(s,N,r,T,sigma);
     for (int k = 0; k<N; k++){
         cout<<price[k]<<endl;
         cout<<s[k]<<endl;
         cout<<Z[k]<<endl;
-        cout<<deltaprime[k]<<endl;
+        cout<<delta[k]<<endl;
     }
 
     return 0;
