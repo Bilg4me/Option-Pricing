@@ -42,15 +42,16 @@ double *moyBSM(double t,int N, double r, double sigma){
   double *MoyBS = new double[N];
   for(int i=0;i<10000;i++){
     double *BSMI;
-    BSMI=BSM(t,N,r,sigma);;
-    for (int j=0,j<N,j++){
+    BSMI=BSM(t,N,r,sigma);
+    for (int j=0;j<N;j++){
         MoyBS[j] = MoyBS[j]+BSMI[j];}
   }
-  for (int k=0,k<N,k++){
+  for (int k=0;k<N;k++){
     MoyBS[j]=MoyBS[j]/10000;
   }
   return MoyBS;
-  }
+}
+
 double K = 34;
 
 double max(double a, double b){
