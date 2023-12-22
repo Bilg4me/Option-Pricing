@@ -107,12 +107,12 @@ return 0.5 * erfc(-z * sqrt(0.5));
 
 
  
-double *delta_BS(int N, double r, double T,double sigma,double S0) {
+double *delta_BSM(int N, double r, double T,double sigma,double S0) {
     double *delta = new double[N];
     double *S;
     S = moyBSM(T, N, r, sigma, S0);
     for (int j = 0; j<N;j++) {
-        delta[j] = cumulative((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N))/(sigma*sqrt(T-T*j/N)));
+        delta[j] = cumulative((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-static_cast<double>(T*j)/N))/(sigma*sqrt(T-static_cast<double>(T*j)/static_cast<double>(N))));
     }
     return delta;
 }
