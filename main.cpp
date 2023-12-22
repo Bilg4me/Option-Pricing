@@ -105,12 +105,12 @@ double cumulative(double z){
 return 0.5 * erfc(-z * sqrt(0.5));
 }
 
-double *delta_BS(int N, double r, double T,double sigma,double S0) {
+double *delta(int N, double r, double T,double sigma,double S0) {
     double *delta = new double[N];
-    double *p;
-    p = moyBSM(T, N, r, sigma, S0);
+    double *S;
+    S = moyBSM(T, N, r, sigma, S0);
     for (int j = 0; j<N;j++) {
-        delta[j] = cumulative((log(p[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N))/(sigma*sqrt(T-T*j/N)));
+        delta[j] = cumulative((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N))/(sigma*sqrt(T-T*j/N)));
     }
     return delta;
 }
