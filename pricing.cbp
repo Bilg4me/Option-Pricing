@@ -38,6 +38,7 @@
 		<Unit filename="option.h" />
 		<Unit filename="pricing.cpp" />
 		<Unit filename="pricing.h" />
+		<Unit filename="tools.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

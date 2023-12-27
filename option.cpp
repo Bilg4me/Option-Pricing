@@ -1,6 +1,6 @@
 #include "option.h"
 
-Option::Option(double S; double K; double σ; int t; int T; double r)
+Option::Option(double S, double K, double v, int t, int T, double r)
 {
     //ctor
 }
