@@ -1,6 +1,8 @@
 #include "option.h"
 #include <iostream>
 
+/** ================ Option class ============= **/
+
 Option::Option()
 {
     //ctor
@@ -14,7 +16,7 @@ Option::Option()
 
 }
 
-Option::Option(double S, double K, double v, int t, int T, double r)
+Option::Option(double S, double K, double v, double t, double T, double r)
 {
     //ctor
     this->S = S;
@@ -53,6 +55,51 @@ Option& Option::operator=(Option& rhs)
 
 ostream& operator<<(ostream& os, Option& option)
 {
-    os << "This option has a theorical call price of " << option.call_price();
+    os << "This option is a " << option.Getoption_type() << " with (S,K) = (" << option.GetS() << "," << option.GetK() << ")";
     return os;
+}
+
+/** ================ Call class ============= **/
+
+double Call::price()
+{
+    double d1 = (log(S/K) + (r + v*v / 2)*tenor) / (v * sqrt(tenor));
+    double d2 = d1 - v*sqrt(tenor);
+    double c = normalCDF(d1)*S - K*exp(-r*tenor)*normalCDF(d2);
+    return c;
+}
+
+double Call::payoff(double Z = 0.)
+{
+    /* Z follow a standard normal distribution N(0,1) */
+    double S_K = S*exp((r-(v*v/2))*tenor + v*sqrt(tenor)*Z) - K;
+    return max(S_K, 0.);
+}
+
+Call::~Call()
+{
+    //dtor
+}
+
+
+/** ================ Put class ============= **/
+
+double Put::price()
+{
+    double d1 = (log(S/K) + (r + v*v / 2)*tenor) / (v * sqrt(tenor));
+    double d2 = d1 - v*sqrt(tenor);
+    double p = (normalCDF(d1)-1)*S - K*exp(-r*tenor)*(normalCDF(d2) -1);
+    return p;
+}
+
+double Put::payoff(double Z = 0.)
+{
+    /* Z follow a standard normal distribution N(0,1) */
+    double K_S =  K - S*exp((r-(v*v/2))*tenor + v*sqrt(tenor)*Z);
+    return max(K_S, 0.);
+}
+
+Put::~Put()
+{
+    //dtor
 }

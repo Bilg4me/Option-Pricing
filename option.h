@@ -1,5 +1,3 @@
-
-
 #ifndef OPTION_H
 #define OPTION_H
 #include "pricing.h"
@@ -8,20 +6,21 @@
 class Option
 {
 
-private:
-    double r; //!< Member variable "r"
-    double S; //!< Member variable "S"
-    double K; //!< Member variable "K"
-    double v; //!< Member variable "v"
-    int t; //!< Member variable "t"
-    int T; //!< Member variable "T"
-    int tenor; //!< Member variable "tenor"
+protected:
+    double r; //!< Member variable "r : risk-free rate"
+    double S; //!< Member variable "S : Stock price of the underlying asset at time t"
+    double K; //!< Member variable "K : Strike price of the option"
+    double v; //!< Member variable "v : volatility"
+    double t; //!< Member variable "t : time t"
+    double T; //!< Member variable "T : maturity date"
+    double tenor; //!< Member variable "tenor"
+    string option_type;
 
 public:
     /** Default constructor **/
     Option();
     /** Parameters constructor **/
-    Option(double S, double K, double v, int t, int T, double r);
+    Option(double S, double K, double v, double t, double T, double r);
     /** Default destructor */
     virtual ~Option();
     /** Copy constructor
@@ -133,36 +132,60 @@ public:
         T = val;
     }
 
-    /** Get trajectory theorical option's price **/
-
-    double call_price()
+    /** Access option_type
+     * \return The current value of option_type
+     */
+    string Getoption_type()
     {
-        double tau = tenor;
-        double d1 = (log(S/K) + (r + v*v / 2)*tau) / (v * sqrt(tau));
-        double d2 = d1 - v*sqrt(tau);
-        double c = normalCDF(d1)*S - K*exp(-r*tau)*normalCDF(d2);
-        return c;
+        return option_type;
+    }
+    /** Set option_type
+     * \param val New value to set
+     */
+    void Setoption_type(string val)
+    {
+        option_type = val;
     }
 
-    double put_price()
-    {
-        double tau = tenor;
-        double d1 = (log(S/K) + (r + v*v / 2)*tau) / (v * sqrt(tau));
-        double d2 = d1 - v*sqrt(tau);
-        double c = (normalCDF(d1)-1)*S - K*exp(-r*tau)*(normalCDF(d2)-1);
-        return c;
-    }
+    /** Get Black-Scholes theorical option's price **/
+
+    virtual double price(){return 0;};
 
     /** Calculate payoff for a call **/
 
-    double payoff(double Z = 0.5)
-    {
-        /* Z follow a standard normal distribution N(0,1) */
-        double S_t_T = S*exp((r-(v*v/2))*tenor + v*sqrt(tenor)*Z);
-        return max(S_t_T - K, 0.);
-    }
+    virtual double payoff(double Z){return 0;};
 
 };
+
+
+class Call : public Option {
+public:
+    /** Default constructor **/
+    Call() : Option() {option_type = "call";} ;
+    /** Parameters constructor **/
+    Call(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r) {option_type = "call";};
+    /** Default destructor */
+    virtual ~Call();
+    /** Get Black-Scholes theorical call price **/
+    virtual double price();
+    /** Calculate payoff for a call **/
+    virtual double payoff(double Z);
+};
+
+class Put : public Option {
+public:
+     /** Default constructor **/
+    Put() : Option() {option_type = "put";} ;
+    /** Parameters constructor **/
+    Put(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r) {option_type = "put";};
+    /** Default destructor **/
+    virtual ~Put();
+    /** Get Black-Scholes theorical put price **/
+    virtual double price();
+    /** Calculate payoff for a call **/
+    virtual double payoff(double Z);
+};
+
 
 ostream& operator<<(ostream& os, Option& option);
 
