@@ -1,16 +1,25 @@
 # depslib dependency file v1.0
-1703670515 source:c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\main.cpp
-	"tools.h"
+1703677036 source:c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\main.cpp
 	<iostream>
+	"option.h"
 
 1702663650 source:c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\pricing.cpp
 
-1703257058 source:c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\option.cpp
+1703677468 source:c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\option.cpp
 	"option.h"
+	<iostream>
 
-1703207911 c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\option.h
+1703676796 c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\option.h
+	"pricing.h"
 
 1703259066 c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\tools.h
 	<random>
 	<chrono>
+
+1703677293 c:\users\bilal\documents\ensae\2a\c++\option pricing\option-pricing\pricing.h
+	<iostream>
+	<string>
+	<random>
+	<chrono>
+	<cmath>
 
