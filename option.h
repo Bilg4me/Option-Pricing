@@ -1,7 +1,6 @@
 #ifndef OPTION_H
 #define OPTION_H
-#include "pricing.h"
-
+using namespace std;
 
 class Option
 {
@@ -36,7 +35,7 @@ public:
     /** Access tenor
      * \return The current value of tenor
      */
-    int Gettenor()
+    double Gettenor()
     {
         return tenor;
     }
@@ -106,7 +105,7 @@ public:
     /** Access t
      * \return The current value of t
      */
-    int Gett()
+    double Gett()
     {
         return t;
     }
@@ -120,7 +119,7 @@ public:
     /** Access T
      * \return The current value of T
      */
-    int GetT()
+    double GetT()
     {
         return T;
     }
@@ -149,21 +148,45 @@ public:
 
     /** Get Black-Scholes theorical option's price **/
 
-    virtual double price(){return 0;};
+    virtual double price()
+    {
+        return 0;
+    };
 
     /** Calculate payoff for a call **/
 
-    virtual double payoff(double Z){return 0;};
+    virtual double payoff(double Z)
+    {
+        return 0;
+    };
+
+    /** Monte Carlo Method that involves in calculating the empiric mean of discounted payoff for t=T **/
+    double MonteCarloSimulation(int N);
+
+    /** Process trajectory of S_t under BSM assumptions for a step of s and for N values **/
+    double* trajectory(double s, int N);
 
 };
 
 
-class Call : public Option {
+class Call : public Option
+{
 public:
     /** Default constructor **/
-    Call() : Option() {option_type = "call";} ;
+    Call() : Option()
+    {
+        option_type = "call";
+    } ;
     /** Parameters constructor **/
-    Call(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r) {option_type = "call";};
+    Call(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r)
+    {
+        option_type = "call";
+    };
+    /** Copy constructor **/
+    Call(Option& other) : Option(other)
+    {
+        option_type = "call";
+    };
     /** Default destructor */
     virtual ~Call();
     /** Get Black-Scholes theorical call price **/
@@ -172,12 +195,24 @@ public:
     virtual double payoff(double Z);
 };
 
-class Put : public Option {
+class Put : public Option
+{
 public:
-     /** Default constructor **/
-    Put() : Option() {option_type = "put";} ;
+    /** Default constructor **/
+    Put() : Option()
+    {
+        option_type = "put";
+    } ;
     /** Parameters constructor **/
-    Put(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r) {option_type = "put";};
+    Put(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r)
+    {
+        option_type = "put";
+    };
+    /** Copy constructor **/
+    Put(Option& other) : Option(other)
+    {
+        option_type = "put";
+    };
     /** Default destructor **/
     virtual ~Put();
     /** Get Black-Scholes theorical put price **/
@@ -185,7 +220,6 @@ public:
     /** Calculate payoff for a call **/
     virtual double payoff(double Z);
 };
-
 
 ostream& operator<<(ostream& os, Option& option);
 

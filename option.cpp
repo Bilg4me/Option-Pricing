@@ -1,6 +1,5 @@
+#include "pricing.h"
 #include "option.h"
-#include <iostream>
-
 /** ================ Option class ============= **/
 
 Option::Option()
@@ -29,11 +28,6 @@ Option::Option(double S, double K, double v, double t, double T, double r)
 
 }
 
-Option::~Option()
-{
-    //dtor
-}
-
 Option::Option(Option& other)
 {
     //copy ctor
@@ -44,6 +38,11 @@ Option::Option(Option& other)
     v = other.Getv();
     r = other.Getr();
     this->Settenor();
+}
+
+Option::~Option()
+{
+    //dtor
 }
 
 Option& Option::operator=(Option& rhs)
@@ -59,6 +58,49 @@ ostream& operator<<(ostream& os, Option& option)
     return os;
 }
 
+double Option::MonteCarloSimulation(int N)
+{
+
+    double y = 0;
+    double* Z = standard_normal_dist(N);
+
+    for(int i=0; i<N; i++)
+    {
+        y += payoff(Z[i]);
+    }
+
+    y *= exp(-r*tenor)/N;
+
+    double BSM_price = price();
+    double absError = abs(y - BSM_price);
+    double errorRate = absError / BSM_price;
+
+    // Displaying results
+    cout << "==================== Resultats de la simulation (" << N << ") ====================" << endl;
+    cout << "Prix moyen du " << option_type << " (Monte Carlo): " << y << endl;
+    cout << "Prix theorique du " << option_type << " : " << BSM_price << endl;
+    cout << "Erreur absolue : " << absError << endl;
+    cout << "Erreur relative : " << errorRate * 100 << "%" << endl;
+    cout << "=====================================================================" << endl;
+
+    return y;
+}
+
+double* Option::trajectory(double s, int N)
+{
+
+    double* B_t;
+    B_t = BM(s,N);
+    double* S_t = new double [N];
+
+    for(int k=0; k < N; k++)
+    {
+        S_t[k] = S*exp((r-v*v/2)*(k*s/N) + v*B_t[k]);
+    }
+    return S_t;
+}
+
+
 /** ================ Call class ============= **/
 
 double Call::price()
@@ -69,7 +111,7 @@ double Call::price()
     return c;
 }
 
-double Call::payoff(double Z = 0.)
+double Call::payoff(double Z)
 {
     /* Z follow a standard normal distribution N(0,1) */
     double S_K = S*exp((r-(v*v/2))*tenor + v*sqrt(tenor)*Z) - K;
@@ -92,7 +134,7 @@ double Put::price()
     return p;
 }
 
-double Put::payoff(double Z = 0.)
+double Put::payoff(double Z)
 {
     /* Z follow a standard normal distribution N(0,1) */
     double K_S =  K - S*exp((r-(v*v/2))*tenor + v*sqrt(tenor)*Z);

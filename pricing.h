@@ -9,6 +9,7 @@
 
 using namespace std;
 
+/* Generates a N-array of values following N(0,1) */
 inline double* standard_normal_dist(int N)
 {
     // Seed for the random number generator using current time
@@ -20,81 +21,44 @@ inline double* standard_normal_dist(int N)
 
     // Creation of array
 
-    double* z = new double[N];
+    double* Z = new double[N];
 
-    // Generate and print random numbers from the normal distribution
-    for (int i = 0; i < N; ++i) {
-        z[i] = distribution(gen);
+    // Generate random numbers from the normal distribution
+    for (int i = 0; i < N; ++i)
+    {
+        Z[i] = distribution(gen);
     }
 
-    return z;
+    return Z;
 }
 
-inline double normalCDF(double x) // N(x)
+/* Cumulative distribution function of standard normal distribution N(0,1) */
+inline double normalCDF(double x)
 {
     return erfc(-x / sqrt(2)) / 2;
 }
 
-/* A basic Brownian Motion with a step of t/N and N values */
-inline double* MB(double t, int N){
-    double *GS;
-    GS  = standard_normal_dist(N);
-    double *MB_t = new double [N];
-    MB_t[0]=0;
-    for (int k = 0; k<N-1;k++){
-        MB_t[k+1] = MB_t[k] + GS[k]*sqrt(t/N) ;
+/* A basic Brownian Motion with a step s and N values */
+inline double* BM(double s, int N)
+{
+    double* Z;
+    Z = standard_normal_dist(N);
+    double* B_t = new double [N];
+    B_t[0]=0;
+    for (int k = 0; k<N-1; k++)
+    {
+        B_t[k+1] = B_t[k] + Z[k]*sqrt(s/N) ;
     }
-    return MB_t;
+    return B_t;
 }
 
-/* Process trajectory of S_t under BSM assumptions */
-inline double* trajectory(double t,int N, double r, double sigma,double S0){
-    double *MBrow;
-    MBrow = MB(t,N);
-    double* S_t = new double [N];
-
-    for(int k = 0; k < N; k++){
-        S_t[k] = S0*exp((r-pow(sigma,2)/2)*(k*t/N) + sigma*MBrow[k]);
-    }
-
-    return S_t;
-}
-
-
-inline double *moyBSM(double t,int N, double r, double sigma,double S0){
-    double *MoyBS = new double[N];
-    for(int i=0;i<10000;i++){
-        double *trajectoryI;
-        trajectoryI=trajectory(t,N,r,sigma,S0);
-        for (int j=0;j<N;j++){
-            MoyBS[j] = MoyBS[j]+trajectoryI[j];}
-    }
-    for (int k=0;k<N;k++){
-        MoyBS[k]=MoyBS[k]/10000;
-    }
-    return MoyBS;
-}
-
-
-inline double phi(double z, double K){
-    double x = z - K;
-    return max(x,0.);
-}
-
-
-inline double MonteCarlo(int N, double (*phi)(double z), double X[], double r, double T, double sigma, double t, double x){
-    double val = 0;
-    for(int i=0; i<N;i++){
-        val+=phi(x*exp((r-(pow(sigma,2)/2))*(T-t) + sigma*sqrt(T-t)*X[i]));
-    }
-    return val/N;
-}
-
-
-inline double *delta_trajectory(double S[],int N, double r, double T,double sigma) {
+/* delta's trajectory of the option*/
+inline double* delta_trajectory(double S[],int N, double r, double T,double sigma)
+{
     double *deltatrajectory = new double[N];
     double K = 30;
-    for (int j = 0; j<N;j++) {
+    for (int j = 0; j<N; j++)
+    {
         deltatrajectory[j] = normalCDF((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N)) /(sigma*sqrt(T-T*j/N)));
     }
     return deltatrajectory;
