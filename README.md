@@ -1,7 +1,7 @@
 # Option Pricing
  Monte Carlo Option Pricing C++ Project @ENSAE
 
-##Project Architecture and OOP Implementation Overview
+## Project Architecture and OOP Implementation Overview
 
 Our Monte Carlo Option Pricing project is thoughtfully organized, utilizing object-oriented programming principles and a modular file structure to enhance maintainability and readability. The key files include `main.cpp`, `option.cpp`, `option.h`, and `pricing.h`, each contributing to the project architecture.
 
@@ -48,7 +48,7 @@ Our Monte Carlo Option Pricing project is thoughtfully organized, utilizing obje
  - Enhance the project's versatility by extending the Option hierarchy to include exotic options. Introduce new classes for exotic options, implementing their specific payoff functions, and integrate these into the Monte Carlo simulation.
 
 ---
-##More details on code :
+## More details on code :
 
 
 To begin with, we recall that this project has for purpose to determine the price of a random European vanilla option (Call and Put), with their replication strategy by using Monte-Carlo Method and Simulations.
