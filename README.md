@@ -1,8 +1,54 @@
 # Option Pricing
- Monte Carlo Option Pricing Project @ENSAE
+ Monte Carlo Option Pricing C++ Project @ENSAE
 
+##Project Architecture and OOP Implementation Overview
 
-Explanation of what the code does :
+Our Monte Carlo Option Pricing project is thoughtfully organized, utilizing object-oriented programming principles and a modular file structure to enhance maintainability and readability. The key files include `main.cpp`, `option.cpp`, `option.h`, and `pricing.h`, each contributing to the project architecture.
+
+**1. File Structure:**
+
+- **main.cpp:**
+  - As the main entry point, `main.cpp` orchestrates the option pricing simulation. This file handles parameter setup, function calls from other files, and result display or logging.
+
+- **option.cpp and option.h:**
+  - The heart of our object-oriented design lies in `option.cpp` and `option.h`. These files contain the generic `Option` class, representing European vanilla options. Within the same files, we find both the `Call` and `Put` classes, derived from `Option`.
+
+- **pricing.h:**
+  - This file houses declarations and definitions related to pricing methods. It encompasses functions or classes responsible for generating Brownian motion, and other pricing-related computations.
+
+**2. Object-Oriented Design:**
+
+- **Generic Option Class:**
+  - The `Option` class, defined in `option.h` and implemented in `option.cpp`, serves as the base class. It includes virtual methods (`payoff`, `Setdelta`, and `price`) to be overridden by derived classes.
+
+- **Derived Call and Put Classes:**
+  - Both the `Call` and `Put` classes, residing in the same `option.cpp` and `option.h` files, inherit from `Option`. They override the virtual methods to provide option type-specific implementations.
+
+- **Polymorphism:**
+  - Polymorphism is achieved through virtual methods, enabling the use of pointers or references to the base `Option` class for working with objects of derived classes.
+
+- **Copy Constructor:**
+  - A copy constructor within the `Option` class facilitates easy creation of a `Call` from a `Put` and vice versa, contributing to code flexibility and reuse.
+
+**3. Suggestions for Further Improvement:**
+
+- **Performance Optimization:**
+  - Explore opportunities for performance optimization within the `option.cpp` and `pricing.h` files, such as vectorization or parallelization techniques.
+
+- **Testing and Validation:**
+  - Thoroughly test functions within the `option.cpp` and `pricing.h` files to ensure accuracy and reliability.
+
+- **Real Data Comparison:**
+  - Compare model outputs with real market option prices for validation and improvement, focusing on methods within the `option.cpp` and `pricing.h` files.
+
+- **Historical Volatility:**
+  - Implement a mechanism within `pricing.h` to calculate historical volatility based on past market data for a more realistic simulation.
+
+- **Extension to Exotic Options**
+ - Enhance the project's versatility by extending the Option hierarchy to include exotic options. Introduce new classes for exotic options, implementing their specific payoff functions, and integrate these into the Monte Carlo simulation.
+
+---
+##More details on code :
 
 
 To begin with, we recall that this project has for purpose to determine the price of a random European vanilla option (Call and Put), with their replication strategy by using Monte-Carlo Method and Simulations.
