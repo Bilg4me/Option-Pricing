@@ -9,7 +9,7 @@
 
 using namespace std;
 
-/* Generates a N-array of values following N(0,1) */
+/** Generates a N-array of values following N(0,1) **/
 inline double* standard_normal_dist(int N)
 {
     // Seed for the random number generator using current time
@@ -32,13 +32,13 @@ inline double* standard_normal_dist(int N)
     return Z;
 }
 
-/* Cumulative distribution function of standard normal distribution N(0,1) */
+/** Cumulative distribution function of standard normal distribution N(0,1) **/
 inline double normalCDF(double x)
 {
     return erfc(-x / sqrt(2)) / 2;
 }
 
-/* A basic Brownian Motion with a step s and N values */
+/** A basic Brownian Motion with a step s and N values **/
 inline double* BM(double s, int N)
 {
     double* Z;
@@ -52,16 +52,5 @@ inline double* BM(double s, int N)
     return B_t;
 }
 
-/* delta's trajectory of the option*/
-inline double* delta_trajectory(double S[],int N, double r, double T,double sigma)
-{
-    double *deltatrajectory = new double[N];
-    double K = 30;
-    for (int j = 0; j<N; j++)
-    {
-        deltatrajectory[j] = normalCDF((log(S[j]/K)+(r+pow(sigma,2)/2)*(T-T*j/N)) /(sigma*sqrt(T-T*j/N)));
-    }
-    return deltatrajectory;
-}
 
 #endif

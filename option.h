@@ -13,6 +13,8 @@ protected:
     double t; //!< Member variable "t : time t"
     double T; //!< Member variable "T : maturity date"
     double tenor; //!< Member variable "tenor"
+    double d1;
+    double delta;
     string option_type;
 
 public:
@@ -45,6 +47,13 @@ public:
     void Settenor()
     {
         tenor = T - t;
+    }
+    /** Set d1
+     * Actualize d1 value
+     */
+    void Setd1()
+    {
+        d1 = (log(S/K) + (r + v*v / 2)*tenor) / (v * sqrt(tenor));
     }
     /** Access r
      * \return The current value of r
@@ -146,6 +155,10 @@ public:
         option_type = val;
     }
 
+    /** Set delta : actualize delta value **/
+
+    virtual void Setdelta(){};
+
     /** Get Black-Scholes theorical option's price **/
 
     virtual double price()
@@ -161,10 +174,13 @@ public:
     };
 
     /** Monte Carlo Method that involves in calculating the empiric mean of discounted payoff for t=T **/
-    double MonteCarloSimulation(int N);
+    double MonteCarloSimulation(int N, bool verbose);
 
-    /** Process trajectory of S_t under BSM assumptions for a step of s and for N values **/
-    double* trajectory(double s, int N);
+    /** Process trajectory of S_t under BSM assumptions with a step of s and for N values **/
+    double* underlying_trajectory(double s, int N);
+
+    /** Process trajectory of option's delta with a step of s and for N values **/
+    double* delta_trajectory(double s, int N);
 
 };
 
@@ -176,19 +192,24 @@ public:
     Call() : Option()
     {
         option_type = "call";
+        delta = normalCDF(d1);
     } ;
     /** Parameters constructor **/
     Call(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r)
     {
         option_type = "call";
+        delta = normalCDF(d1);
     };
     /** Copy constructor **/
     Call(Option& other) : Option(other)
     {
         option_type = "call";
+        delta = normalCDF(d1);
     };
     /** Default destructor */
     virtual ~Call();
+    /** Setting delta with BSM model **/
+    virtual void Setdelta();
     /** Get Black-Scholes theorical call price **/
     virtual double price();
     /** Calculate payoff for a call **/
@@ -202,19 +223,24 @@ public:
     Put() : Option()
     {
         option_type = "put";
+        delta = normalCDF(d1) - 1;
     } ;
     /** Parameters constructor **/
     Put(double S, double K, double v, double t, double T, double r) : Option(S,K,v,t,T,r)
     {
         option_type = "put";
+        delta = normalCDF(d1) - 1;
     };
     /** Copy constructor **/
     Put(Option& other) : Option(other)
     {
         option_type = "put";
+        delta = normalCDF(d1) - 1;
     };
     /** Default destructor **/
     virtual ~Put();
+    /** Setting delta with BSM model **/
+    virtual void Setdelta();
     /** Get Black-Scholes theorical put price **/
     virtual double price();
     /** Calculate payoff for a call **/

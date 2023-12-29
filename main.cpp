@@ -5,14 +5,14 @@
 using namespace std;
 
 int main() {
-    Call myCall(100,100,0.3,0,1,0.03);
-    int N = 100;
-    double s = 10;
-    double* S_t;
+    Call myOption;
+    int N = 20;
+    double s = 1e-1;
+    double* delta_t;
 
-    S_t = myCall.trajectory(s, N);
-    for(int i=0; i < N; i++){
-        cout << S_t[i] << endl;
-    }
+    delta_t = myOption.delta_trajectory(s, N);
+//    for(int i=0; i < n; i++){
+//        cout << delta_t[i] << endl;
+//    }
     return 0;
 }
