@@ -45,7 +45,7 @@ Our Monte Carlo Option Pricing project is thoughtfully organized, utilizing obje
   - Implement a mechanism within `pricing.h` to calculate historical volatility based on past market data for a more realistic simulation.
 
 - **Extension to Exotic Options**
- - Enhance the project's versatility by extending the Option hierarchy to include exotic options. Introduce new classes for exotic options, implementing their specific payoff functions, and integrate these into the Monte Carlo simulation.
+  - Enhance the project's versatility by extending the Option hierarchy to include exotic options. Introduce new classes for exotic options, implementing their specific payoff functions, and integrate these into the Monte Carlo simulation.
 
 ---
 ## More details on code :
