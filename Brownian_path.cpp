@@ -10,14 +10,14 @@ using namespace std;
 
 /*
 
-Je veux crée un vecteur de taille n (avec n en entrée), chaque élement de mon vecteur doit être une variable aléatoire qui suit une loi normale.
+Let's create a vector of size n (with n as input), each element of my vector will be a random variable that follows a normal distribution.
 
 
 */
 
 double normal_distr_centr_red(){
 
-    normal_distribution<double> distrN(0.0, 1.0); // Distribution normale centrée réduite
+    normal_distribution<double> distrN(0.0, 1.0); // Normal distribution, centred and reduced
 
     random_device rd;
 
@@ -34,18 +34,18 @@ double normal_distr_centr_red(){
 
 vector<double> Brownian_function(int t){
 
-    vector<double> Liste; /* liste avec t éléments valant 0 : [0, 0 ,0 ... t fois] */
-
-    /* On va remplacer ces 0 par les Wi */
+    vector<double> Liste; /* vector with no elements*/
 
     Liste.push_back(0);
 
+    /* We fill the vector with the Wi values for each indice of time */
+
     for(int i=0; i< t ; i++) {
 
-        double W = sqrt(i+1-i)*normal_distr_centr_red() + Liste[-1]; /* quand on modifiera le pas de temps on changera le i+1-i*/
+        double W = sqrt(i+1-i)*normal_distr_centr_red() + Liste[-1]; /* If we want to change the path of time in the future we will simply have to remplace the i+1-i by an other time step */
 
 
-        /* On met la valeur Wi à la place ieme de la liste*/
+        /* We put the Wi value in the ith place in the list*/
 
         Liste.push_back(W);
 
@@ -55,7 +55,7 @@ vector<double> Brownian_function(int t){
 
 
 
-    return Liste ; /* Return les W0, W1, ..., Wt : on aura plus qu'a les insérer pour avoir un St*/
+    return Liste ; /* Return the W0, W1, ..., Wt : we'll just have to insert them to get a St*/
 
 };
 
@@ -105,7 +105,7 @@ for (int i=0; i<20; i++) {
 }
 */
 
-cout << " Voici une liste des valeurs à chaque pas de temps d'une fonction brownienne " << endl;
+cout << " Here is a list of the values at each time step of a Brownian function " << endl;
 
 
 vector<double> x = Brownian_function(20);
