@@ -101,13 +101,13 @@ This code has for purpose to determine the price of a random European plain vani
 \begin{frame}{Code summary 2}
 To get all these information with Monte-Carlo Method, we have to implement some functions.
 
-Let's begin with the simulation of a brownian path which is the path used in BSM-Model hypotheses.
+Let's begin with the simulation of a brownian path which is the path used in BSM-Model hypotheses. To get a brownian path, we implemented few functions such as follows :
 
 
 
 \begin{itemize}
     \item 
-        To get a brownian path
+        A standard normal distribution 'standardnormaldist', that creates a N-array of random variable following a N(0,1)   
         
      \end{itemize}
      
@@ -115,9 +115,21 @@ Let's begin with the simulation of a brownian path which is the path used in BSM
 
 \begin{itemize}
     \item 
-        tttt
+        A function 'BM' that takes a N-array from 'standardnormaldist' and transforms it into a brownian motion with a time step s and N values
         
      \end{itemize}
      
+ \begin{itemize}
+    \item 
+        This normal brownian motion with the function 'underlying-trajectory' will be transformed into a geometric brownian motion with a drift 'r' and a diffusion 'sigma'
+        
+     \end{itemize} 
 \end{frame}
+
+\begin{frame}{Code summary 3}
+simulation monte carlo, delta-trajectory, test with real values of the theoretical model ...
+
+
+\end{frame}
+
 \end{document}
