@@ -1,0 +1,204 @@
+\documentclass{beamer}
+\usepackage{color}
+%Information to be included in the title page:
+\title{C++ Option Pricing Project Presentation}
+\author{Adrien MATHIEU, Louis REISSE, Bilal BENHANA, Fréderic HUANG}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Property}
+\newtheorem{model}{Model}
+
+\begin{document}
+
+\frame{\titlepage}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item C++ programming project defense 
+        \item Pricing European options using Monte Carlo methods
+    \end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Table des matières}
+\tableofcontents
+\end{frame}
+\begin{frame}{Mathematical framework}
+\section{Mathematical framework}
+Consider a probability space $(\Omega, \mathcal{F}, \mathbb{Q})$, a Brownian Motion $W$, and the stochastic pricing process $S$ following the  dynamic :   
+   \begin{equation}
+         dS_t = S_t(r dt + \sigma dW_t) ,S_0 = x
+   \end{equation}
+   and that can be explicitly solved 
+   \begin{equation}
+         S_t = x e^{(r - \frac{1}{2}\sigma^2)t + \sigma W_t}
+   \end{equation}
+   \end{frame}
+   \begin{frame}{Pricing model}
+       We consider a measurable function  $\phi$ and depending on the underlying price $S$.
+    \\
+    \newline
+    In our project, we will only consider path-independant options, then the option's payoff will be under the following form:  $\phi(S_T)$ at the maturity $T$.
+\begin{model}[Pricing model]
+\subsection{Pricing model}
+  Set $p(t,S_t)$ the value of an option at time t, $t \leq T$ and based on the underlying asset $S$.
+    \\
+    Then we get :
+    \begin{equation}
+        p(t,S_t) = e^{-r(T-t)}\mathbb{E}[\phi(S_T)\lvert \mathcal{F}_t ]
+    \end{equation}
+    After rewriting, we get :  
+    \begin{equation}
+        p(t,S_t) = e^{-r(T-t)}H(S_t)
+    \end{equation}
+    where $H(x) := \mathbb{E}[\phi(x e^{(r-\frac{1}{2}\sigma^2)(T-t) + \sigma(
+    W_T-W_t)})]$
+\end{model}
+
+\end{frame}
+\begin{frame}{Monte Carlo simulation}
+\subsection{Monte Carlo simulation}
+    \begin{model}[Pricing by Monte Carlo]
+         We can estimate the value of $p(t,x)$ by 
+    \begin{equation}
+        \Tilde{p}_n(t,x) = \frac{1}{n}e^{-r(T-t)} \sum_{k=1}^n \phi(xe^{(r-\frac{1}{2}\sigma^2)(T-t) + \sigma \sqrt{T-t}Z_k})
+    \end{equation}
+    where the $Z_k$ are iid and have the same law as $\mathcal{N}(0,1)$.
+    \end{model}
+\end{frame}
+\begin{frame}{Replication porfolio}
+\subsection{Replication porfolio}
+\begin{itemize}
+    \item 
+      We denote as $V_t$ the porfolios value at time $t$. A replication strategy for a payoff option $\phi(S_T)$ is given by a pair $(x, \phi)$ where $x$ corresponds to the initial value of the strategy (initial value of the replication portfolio), and $\psi= (\psi_t)_t$ is the quantity of risky assets contained in the portfolio. 
+    \item   We say that a porfolio $V_t^{x, \psi}$ verifies the self-financing condition if its present value, \textit{ie.} $\Tilde{V}_t^{x,\psi}$, equals $ \Tilde{V}_t^{x,\psi}= x + \int_0^t \psi_r \sigma \Tilde{S}_t dW_t$, where $\Tilde{S}_t := S_t e^{-rt}$.
+    \\
+     \item  Under the model's hypothesis, we get that  :
+    $$x= p(0,S_0), \psi_t = \frac{\partial }{\partial x}p(t,S_t)$$
+    \item We find $x$ using our pricing model, and once we get $\Tilde{p}_n(t,x)$ we can compute $\psi_t$ by finite difference methods. 
+    \end{itemize}
+\end{frame}
+\section{Code}
+\subsection{Project Overview}
+\begin{frame}{Project Overview}
+  \frametitle{Project Architecture Overview}
+
+  \begin{itemize}
+    \item \textbf{File Structure:}
+      \begin{itemize}
+        \item \texttt{main.cpp} - Main entry point orchestrating the simulation.
+        \item \texttt{option.cpp} and \texttt{option.h} - Core files with \texttt{Option}, \texttt{Call}, and \texttt{Put} classes.
+        \item \texttt{pricing.h} - Declarations and definitions for pricing auxiliary function.
+      \end{itemize}
+  \end{itemize}
+
+\end{frame}
+\subsection{Code summary}
+\begin{frame}{Code summary}
+This code has for purpose to determine the price of a random European plain vanilla option for both call and put. This code will deliver in the end for each time t before maturity T :
+    \begin{itemize}
+        \item 
+            The price of the option \texttt{price} and \texttt{MonteCarloSimulation}
+    
+        \item 
+            The payoff of the option : \texttt{payoff}
+    
+        \item 
+            The theorical delta of the option : \texttt{delta} and \texttt{Setdelta}
+            
+    
+        \item 
+            A simulation of the underlying trajectory process : \texttt{underlying-trajectory}
+           
+        \item 
+            A simulation and estimation of the errors of the delta trajectory process (core of the replication strategy) : \texttt{delta-trajectory}
+    \end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{Auxiliary functions}
+To get all these information with Monte-Carlo Method, we have to implement some auxiliary functions.
+
+Let's begin with the simulation of a brownian path which is the path used in BSM-Model hypotheses. To get a brownian path, we implemented few functions such as follows :
+
+
+\begin{itemize}
+    \item 
+        A standard normal distribution 'standardnormaldist', that creates a N-array of random variable following a N(0,1)   
+        
+     \end{itemize}
+     
+\vspace{2mm}   
+
+\begin{itemize}
+    \item 
+        A function 'BM' that takes a N-array from 'standardnormaldist' and transforms it into a brownian motion with a time step s and N values
+        
+     \end{itemize}
+     
+ \begin{itemize}
+    \item 
+        This normal brownian motion with the function 'underlying-trajectory' will be transformed into a geometric brownian motion with a drift 'r' and a diffusion 'sigma'
+        
+     \end{itemize} 
+\end{frame}
+
+\subsection{OOP Implementation}
+\begin{frame}{Object-Oriented Design}
+  \frametitle{OOP Implementation Overview}
+
+  \begin{itemize}
+    \item \textbf{Object-Oriented Design:}
+      \begin{itemize}
+        \item \texttt{Option} Class:
+          \begin{itemize}
+            \item Represents a generic European vanilla option.
+            \item Includes virtual methods (\texttt{payoff}, \texttt{Setdelta}, \texttt{price}) to be overridden by derived classes.
+          \end{itemize}
+        \item Derived Classes:
+          \begin{itemize}
+            \item \texttt{Call} and \texttt{Put} classes derive from \texttt{Option}.
+            \item Override virtual methods with option type-specific implementations.
+          \end{itemize}
+        \item Polymorphism:
+          \begin{itemize}
+            \item Achieved through virtual methods, allowing flexibility in using pointers or references to the base \texttt{Option} class.
+            \item Overloaded the \texttt{<<} operator to enable consistent printing of option information across different option types.
+          \end{itemize}
+        \item Copy Constructor:
+          \begin{itemize}
+            \item Implemented within the \texttt{Option} class for easy creation of a \texttt{Call} from a \texttt{Put} and vice versa, contributing to code flexibility and reuse.
+          \end{itemize}
+      \end{itemize}
+  \end{itemize}
+
+\end{frame}
+\subsection{Improvements}
+\begin{frame}{Improvements}
+
+  \frametitle{Potential Improvements}
+
+    \item \textbf{Real Data Comparison:}
+    \begin{itemize}
+    \item Compare model outputs with real market option prices for validation and improvement, focusing on methods within the \texttt{option.cpp} and \texttt{pricing.h} files.
+    \end{itemize}
+    \item \textbf{Historical Volatility:}
+    \begin{itemize}
+    \item Implement a mechanism within \texttt{pricing.h} to calculate historical volatility based on past market data for a more realistic simulation.
+    \end{itemize}
+    \item \textbf{Extension to Exotic Options:}
+    \begin{itemize}
+    \item Enhance the project's versatility by extending the \texttt{Option} hierarchy to include exotic options (Asian option, Barrier Option, Lookback option). Introduce new classes for exotic options, implementing their specific payoff functions, and integrate these into the Monte Carlo simulation.
+    \end{itemize}
+    
+    
+    \item \textbf{Graph}: Our project may lack graphical representations.
+      
+\end{frame}
+
+\subsection{Issues encountered}
+\begin{frame}{Issues encountered}
+\begin{itemize}
+\item \underline{Multiple definitions}: Since we had multiple definitions of functions in 'princing.h', we encountered conflict during the linking phase.
+\item \underline{Theoretical Issue}: We had little issues with the theory which made our values more imprecise.
+\end{itemize}
+\end{frame}
+\end{document}
