@@ -129,7 +129,22 @@ Let's begin with the simulation of a brownian path which is the path used in BSM
 \begin{frame}{Code summary 3}
 simulation monte carlo, delta-trajectory, test with real values of the theoretical model ...
 
+\end{frame}
+
+\section{Issues encountered}
+\begin{frame}{Issues encountered}
+\begin{itemize}
+\item \underline{Multiple definitions}: Since we had multiple definitions of functions in 'princing.h', we encountered conflict during the linking phase.
+\item \underline{Theoretical Issue}: We had little issues with the theory which made our values more imprecise.
+\end{itemize}
+\end{frame}
+\begin{frame}{Possible improvements}
+    \begin{itemize}
+\item \underline{Other options}: In our project we only priced call and put options but we could have priced other options such as Asian option, Exotic Option, Barrier Option, Lookback option by changing the function h. However, we believe the core of our project was enought.\\
+\item \underline{Graph}: Our project may lack graphical representations.
+\end{itemize}
 
 \end{frame}
+
 
 \end{document}
